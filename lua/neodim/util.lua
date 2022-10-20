@@ -3,11 +3,18 @@ local M = {}
 local ts_utils = require "nvim-treesitter.ts_utils"
 local highlighter = require "vim.treesitter.highlighter"
 
+local hack = {
+  ["punctuation"] = "punct"
+}
+
 local to_hl_group = function (inputstr, sep)
   if not inputstr then return end
   sep = sep or '%.'
   local t = {}
   for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+    if hack[str] then
+      str = hack[str]
+    end
     table.insert(t, str:sub(1, 1):upper() .. str:sub(2))
   end
   return 'TS' .. table.concat(t)
